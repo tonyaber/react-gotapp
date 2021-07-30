@@ -1,0 +1,29 @@
+.wrong-url{
+    color: red;
+    text-align: center;
+    font-size: 20px;
+    display: block;
+    padding: 10px;
+}
+.wrong-url-link:link, .wrong-url-link:visited{
+    display: block;
+    width: 350px;
+    text-decoration: none;
+    text-align:center;
+    margin: 0 auto;
+    padding: 15px;
+    font-size:25px;
+    border: darkblue;
+    border-radius:25px;
+    background-color: darkcyan;
+    color: white;
+
+}
+
+.home-page{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    display: block;
+    padding: 10px;
+}

@@ -1,6 +1,12 @@
 export default class Fetch{
     constructor() {
         this._apiBase = 'https://www.anapioficeandfire.com/api';
+        this.getAllCharacters = this.getAllCharacters.bind(this);
+        this.getAllBooks = this.getAllBooks.bind(this);
+        this.getAllHouses = this.getAllHouses.bind(this);
+        this.getCharacter = this.getCharacter.bind(this);
+        this.getBook = this.getBook.bind(this);
+        this.getHouse = this.getHouse.bind(this);
     }
 
     getResource = async (url) => {

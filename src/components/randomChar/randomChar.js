@@ -29,6 +29,7 @@ export default class RandomChar extends Component {
     componentWillUnmount() {
         clearInterval(this.timerId);
     }
+    
     onCharLoaded(char) {
         this.setState({
             char,
@@ -44,7 +45,8 @@ export default class RandomChar extends Component {
     }
 
     updateChar() {
-        const id = 100000000;
+        const id = Math.floor(Math.random() * 2138)
+
         this.fetch.getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
