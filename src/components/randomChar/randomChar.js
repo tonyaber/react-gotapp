@@ -4,6 +4,7 @@ import Fetch from '../../fetch'
 import Spinner from '../spinner';
 import View from './view';
 import ErrorMessage from '../errorMessage';
+import PropTypes from 'prop-types';
 
 export default class RandomChar extends Component {
     constructor() {
@@ -23,7 +24,7 @@ export default class RandomChar extends Component {
 
     componentDidMount() {
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 1500);
+        this.timerId = setInterval(this.updateChar, this.props.interval);
     }
 
     componentWillUnmount() {
@@ -45,7 +46,7 @@ export default class RandomChar extends Component {
     }
 
     updateChar() {
-        const id = Math.floor(Math.random() * 2138)
+        const id = Math.floor(Math.random() * 2138);
 
         this.fetch.getCharacter(id)
             .then(this.onCharLoaded)
@@ -69,3 +70,6 @@ export default class RandomChar extends Component {
     }
 }
 
+RandomChar.propTypes = {
+    interval: PropTypes.number,
+}

@@ -28,7 +28,8 @@ export default class Fetch{
     }
 
     async getAllCharacters() {
-        const result = await this.getResource(`/characters?page=5&pageSize=10`);
+        const randomNumber = Math.floor(Math.random() * 213);
+        const result = await this.getResource(`/characters?page=${randomNumber}`);
         return result.map(this._transformCharacter);
     }
 

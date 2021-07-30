@@ -41,7 +41,7 @@ class App extends Component {
             return <ErrorMessage />
         }
 
-        const char = this.state.randomChar ? <RandomChar /> : null;
+        const char = this.state.randomChar ? <RandomChar interval={4000}/> : null;
 
         return (
             <Router>
