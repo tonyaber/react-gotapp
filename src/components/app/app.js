@@ -3,9 +3,9 @@ import { Col, Row, Container, Button } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
-import {CharacterPage, BooksPage, HousesPage, BooksItem, HomePage, WrongPage} from '../pages';
+import { CharacterPage, BooksPage, HousesPage, BooksItem, HomePage, WrongPage } from '../pages';
 import Fetch from '../../fetch';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './app.css';
 
 class App extends Component {
@@ -41,7 +41,7 @@ class App extends Component {
             return <ErrorMessage />
         }
 
-        const char = this.state.randomChar ? <RandomChar interval={4000}/> : null;
+        const char = this.state.randomChar ? <RandomChar interval={4000} /> : null;
 
         return (
             <Router>
@@ -60,7 +60,7 @@ class App extends Component {
                                 <Button onClick={this._toggleRandomChar} color="primary">Toggle random character</Button>
                             </Col>
                         </Row>
-                        
+
                         <Switch>
                             <Route path='/characters' exact component={CharacterPage} />
                             <Route path='/houses' exact component={HousesPage} />
@@ -68,14 +68,14 @@ class App extends Component {
                             <Route path='/books/:id' render={
                                 ({ match }) => {
                                     const { id } = match.params;
-                                    return <BooksItem bookId={id}/>
+                                    return <BooksItem bookId={id} />
                                 }
-                                } />
+                            } />
                             <Route path="/" exact component={HomePage} />
                             <Route component={WrongPage} />
-                          
+
                         </Switch>
-                        
+
                     </Container>
                 </div>
             </Router>

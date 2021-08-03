@@ -1,75 +1,55 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import './randomChar.css';
 import Fetch from '../../fetch'
 import Spinner from '../spinner';
 import View from './view';
 import ErrorMessage from '../errorMessage';
-import PropTypes from 'prop-types';
 
-export default class RandomChar extends Component {
-    constructor() {
-        super();
-        this.state = {
-            char: {},
-            loading: true,
-            error: false,
-        }
+function RandomChar({interval}) {
+    const [char, setChar] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-        this.onCharLoaded = this.onCharLoaded.bind(this);
-        this.updateChar = this.updateChar.bind(this);
-        this.onError = this.onError.bind(this);
+    const fetch = new Fetch();
 
-        this.fetch = new Fetch();
+    useEffect(() => {
+        updateChar();
+        const timerId = setInterval(updateChar, interval);
+        return () => {
+            clearInterval(timerId);
+        }    
+    }, []);
+
+    function onCharLoaded(char) {
+        setChar(char);
+        setLoading(false);        
     }
 
-    componentDidMount() {
-        this.updateChar();
-        this.timerId = setInterval(this.updateChar, this.props.interval);
+    function onError(err) {
+        setError(true);
+        setLoading(false);
     }
 
-    componentWillUnmount() {
-        clearInterval(this.timerId);
-    }
-    
-    onCharLoaded(char) {
-        this.setState({
-            char,
-            loading: false,
-        })
-    }
-
-    onError(err) {
-        this.setState({
-            error: true,
-            loading: false,
-        })
-    }
-
-    updateChar() {
+    function updateChar() {
         const id = Math.floor(Math.random() * 2138);
-
-        this.fetch.getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError);
-    }
-
-    render() {
-        const { char, loading, error } = this.state;
-
-        const errorMessage = error ? <ErrorMessage /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const content = !(loading || error) ? <View char={char} /> : null;
         
-        return (
-            <div className="random-block rounded">
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
+        fetch.getCharacter(id)
+            .then(onCharLoaded)
+            .catch(onError);
     }
-}
 
-RandomChar.propTypes = {
-    interval: PropTypes.number,
+     
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error) ? <View char={char} /> : null;
+
+    return (
+        <div className="random-block rounded">
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    );
+    
 }
+export default RandomChar;
