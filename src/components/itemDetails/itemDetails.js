@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect} from 'react';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import './itemDetails.css';
-import Fetch from '../../fetch';
 import { WrongPage } from '../pages';
 import Spinner from '../spinner';
 
@@ -16,77 +15,66 @@ const Field = ({ item, field, label }) => {
 }
 
 export { Field };
-
-export default class ItemDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.gotService = new Fetch();
-        this.state = {
-            item: null,
-            loading: true,
-        }
-        
-    }
-
-    componentDidMount() {
-        this.updateChar();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.itemId !== prevProps.itemId) {
-          this.updateChar();  
-        }        
-    }
     
+function ItemDetails({ itemId, getData, children}) {
+    
+    const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        updateChar();
+    }, [itemId])
 
-    updateChar() {
-        const { itemId, getData } = this.props;
-        
+    function updateChar() {
         if (!itemId) {
-            this.setState({loading: false });
+            setLoading(false);
             return;
         }
 
         getData(itemId)
             .then((item) => {
-                this.setState({ item,loading: false});
+                setItem(item);
+                setLoading(false);
             })
             .catch(() => {
-                this.setState({ item: undefined, loading: false});
-        })
+                setItem(undefined);
+                setLoading(false);
+            })
     }
 
-    render() {
-        if (this.state.loading) {
-            return <Spinner/>
-        }
+    
+    if (loading) {
+        return <Spinner/>
+    }
         
-        if (this.state.item===null) {
-            return <span className="select-error">Please select something</span>
-        }
-        if (this.state.item === undefined) {
-            return <WrongPage/>
-        }
-
-        const { item } = this.state;
-        const { name } = item;
-        const itemDetails = (
-            <>
-            <h4>{name}</h4>
-                    <ListGroup className="list-group list-group-flush">
-                    {
-                        React.Children.map(this.props.children, (child) => {
-                            return React.cloneElement(child, {item})
-                        })
-                    }
-                </ListGroup>
-            </>
-        )
-                
-        return (
-            <div className="char-details rounded">
-                {itemDetails}
-            </div>
-        );
+    if (item===null) {
+        return <span className="select-error">Please select something</span>
     }
+    if (item === undefined) {
+        return <WrongPage/>
+    }
+
+    
+    
+    const itemDetails = (
+        <>
+            <h4>{item.name}</h4>
+            <ListGroup className="list-group list-group-flush">
+            {
+                React.Children.map(children, (child) => {
+                    return React.cloneElement(child, {item})
+                })
+            }
+            </ListGroup>
+        </>
+    )
+                
+    return (
+        <div className="char-details rounded">
+            {itemDetails}
+        </div>
+    );
+    
 }
+
+export default ItemDetails;
